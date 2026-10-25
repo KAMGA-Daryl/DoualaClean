@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:DoualaClean.ViewModels"
+             xmlns:m="clr-namespace:DoualaClean.Models"
+             xmlns:c="clr-namespace:DoualaClean.Controls"
+             x:Class="DoualaClean.Views.LoginPage"
+             x:DataType="vm:LoginViewModel" Title="Connexion">
+    <ScrollView>
+        <VerticalStackLayout Padding="32,60,32,32" Spacing="16">
+            <Border BackgroundColor="White" StrokeThickness="0" StrokeShape="RoundRectangle 16" Padding="12">
+                <Image Source="logo.png" HeightRequest="80" Aspect="AspectFit" />
+            </Border>
+            <Label Text="Connexion" Style="{StaticResource Title}" Margin="0,28,0,8" />
+
+            <Entry Placeholder="Entrez votre email" Keyboard="Email" Text="{Binding Email}" ReturnType="Next" />
+            <Entry Placeholder="Mot de passe" IsPassword="True" Text="{Binding Password}"
+                   ReturnType="Go" ReturnCommand="{Binding LoginCommand}" />
+
+            <Label Text="{Binding ErrorMessage}" IsVisible="{Binding HasError}" Style="{StaticResource Error}" />
+
+            <Button Text="Se connecter" Command="{Binding LoginCommand}" IsEnabled="{Binding IsNotBusy}" Margin="0,16,0,0" />
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+
+            <Label Text="Mot de passe oublié ?" Style="{StaticResource Link}" Margin="0,16,0,0">
+                <Label.GestureRecognizers><TapGestureRecognizer Command="{Binding GoForgotCommand}" /></Label.GestureRecognizers>
+            </Label>
+            <Label HorizontalOptions="Center" HorizontalTextAlignment="Center" Margin="0,8,0,0">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="Pas encore de compte ? " />
+                        <Span Text="S'inscrire" TextColor="{StaticResource BrandLight}" TextDecorations="Underline" FontAttributes="Bold" />
+                    </FormattedString>
+                </Label.FormattedText>
+                <Label.GestureRecognizers><TapGestureRecognizer Command="{Binding GoRegisterCommand}" /></Label.GestureRecognizers>
+            </Label>
+            <Label Text="{Binding DemoHint}" IsVisible="{Binding ShowDemoHint}" Style="{StaticResource Muted}"
+                   HorizontalTextAlignment="Center" HorizontalOptions="Center" Margin="0,24,0,0" />
+            <Label Text="{Binding ServerUrl, StringFormat='⚙ Serveur : {0}'}" IsVisible="{Binding ShowServerLink}" Style="{StaticResource Muted}"
+                   HorizontalOptions="Center" Margin="0,24,0,0">
+                <Label.GestureRecognizers><TapGestureRecognizer Command="{Binding ConfigureServerCommand}" /></Label.GestureRecognizers>
+            </Label>
+            <Button Text="Tester la connexion au serveur" Command="{Binding TestServerCommand}" IsVisible="{Binding ShowServerLink}"
+                    Style="{StaticResource SecondaryButton}" FontSize="14" HeightRequest="44" Margin="0,6,0,0" />
+            <Label Text="{Binding ServerStatus}" Style="{StaticResource Muted}" HorizontalTextAlignment="Center" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

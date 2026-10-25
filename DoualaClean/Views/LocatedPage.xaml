@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:DoualaClean.ViewModels"
+             xmlns:m="clr-namespace:DoualaClean.Models"
+             xmlns:c="clr-namespace:DoualaClean.Controls"
+             xmlns:maps="http://schemas.microsoft.com/dotnet/2021/maui/maps"
+             x:Class="DoualaClean.Views.LocatedPage"
+             x:DataType="vm:LocatedViewModel" Title="Localisé">
+    <Grid RowDefinitions="Auto,Auto,*,Auto" Padding="24,30,24,24" RowSpacing="12">
+        <c:BackButton />
+        <Label Grid.Row="1" Text="Localisé" Style="{StaticResource Title}" />
+        <Border Grid.Row="2" StrokeThickness="0" StrokeShape="RoundRectangle 16">
+            <maps:Map x:Name="BinsMap" IsShowingUser="True" />
+        </Border>
+        <VerticalStackLayout Grid.Row="3" Spacing="8">
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+            <Label Text="{Binding ErrorMessage}" IsVisible="{Binding HasError}" Style="{StaticResource Error}" />
+            <Label Text="{Binding PositionText}" HorizontalTextAlignment="Center" />
+            <Button Text="Actualiser ma position" Command="{Binding LocateCommand}" Style="{StaticResource SecondaryButton}" />
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>

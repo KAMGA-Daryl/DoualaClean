@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:DoualaClean.ViewModels"
+             xmlns:m="clr-namespace:DoualaClean.Models"
+             xmlns:c="clr-namespace:DoualaClean.Controls"
+             x:Class="DoualaClean.Views.NotificationsPage"
+             x:DataType="vm:SettingsViewModel" Title="Notifications push">
+    <ScrollView>
+        <VerticalStackLayout Padding="24,30,24,32" Spacing="16">
+            <c:BackButton />
+            <Label Text="Notifications push" Style="{StaticResource Title}" Margin="0,8,0,16" />
+
+            <Border Style="{StaticResource Card}">
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Rappels de passage des camions :" FontAttributes="Bold" />
+                        <Label Text="Recevoir une alerte avant la collecte dans mon quartier" Style="{StaticResource Muted}" />
+                    </VerticalStackLayout>
+                    <Switch Grid.Column="1" IsToggled="{Binding TruckReminders}" OnColor="{StaticResource Success}" VerticalOptions="Center" />
+                </Grid>
+            </Border>
+
+            <Border Style="{StaticResource Card}">
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Mises à jour de mes signalements :" FontAttributes="Bold" />
+                        <Label Text="Être notifié quand un dépôt est pris en charge" Style="{StaticResource Muted}" />
+                    </VerticalStackLayout>
+                    <Switch Grid.Column="1" IsToggled="{Binding ReportUpdates}" OnColor="{StaticResource Success}" VerticalOptions="Center" />
+                </Grid>
+            </Border>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

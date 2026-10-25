@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:DoualaClean.ViewModels"
+             xmlns:m="clr-namespace:DoualaClean.Models"
+             xmlns:c="clr-namespace:DoualaClean.Controls"
+             x:Class="DoualaClean.Views.SettingsPage"
+             x:DataType="vm:SettingsViewModel" Title="Paramètres &amp; Options">
+    <ScrollView>
+        <VerticalStackLayout Padding="24,30,24,32" Spacing="14">
+            <c:BackButton />
+            <Label Text="Paramètres &amp; Options" Style="{StaticResource Title}" FontSize="24" Margin="0,8,0,8" />
+
+            <Border WidthRequest="120" HeightRequest="120" StrokeShape="Ellipse" StrokeThickness="0"
+                    BackgroundColor="{StaticResource SurfaceLight}" HorizontalOptions="Center">
+                <Label Text="{Binding FullName}" TextColor="{StaticResource Brand}" FontAttributes="Bold"
+                       HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center" Margin="8" />
+            </Border>
+
+            <Border Style="{StaticResource Card}" Margin="0,12,0,0">
+                <Grid ColumnDefinitions="*,Auto">
+                    <Label Text="Mode sombre" VerticalOptions="Center" />
+                    <Label Grid.Column="1" Text="{Binding ThemeIcon}" FontSize="32" />
+                </Grid>
+                <Border.GestureRecognizers><TapGestureRecognizer Command="{Binding ToggleThemeCommand}" /></Border.GestureRecognizers>
+            </Border>
+            <Label Text="{Binding ThemeHint}" Style="{StaticResource Muted}" HorizontalTextAlignment="Center" />
+
+            <Border Style="{StaticResource Card}">
+                <Grid ColumnDefinitions="*,Auto">
+                    <Label Text="Langue" VerticalOptions="Center" />
+                    <Label Grid.Column="1" Text="›" FontSize="26" />
+                </Grid>
+                <Border.GestureRecognizers><TapGestureRecognizer Command="{Binding GoLanguageCommand}" /></Border.GestureRecognizers>
+            </Border>
+            <Border Style="{StaticResource Card}">
+                <Grid ColumnDefinitions="*,Auto">
+                    <Label Text="Notifications push" VerticalOptions="Center" />
+                    <Label Grid.Column="1" Text="›" FontSize="26" />
+                </Grid>
+                <Border.GestureRecognizers><TapGestureRecognizer Command="{Binding GoNotificationsCommand}" /></Border.GestureRecognizers>
+            </Border>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

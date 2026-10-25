@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:DoualaClean.ViewModels"
+             xmlns:m="clr-namespace:DoualaClean.Models"
+             xmlns:c="clr-namespace:DoualaClean.Controls"
+             x:Class="DoualaClean.Views.BinDetailPage"
+             x:DataType="vm:BinDetailViewModel" Title="Détails du bac">
+    <ScrollView>
+        <VerticalStackLayout Padding="24,30,24,32" Spacing="16">
+            <c:BackButton />
+            <Label Text="Détails du bac - Point de collecte" Style="{StaticResource Title}" FontSize="22" Margin="0,8,0,8" />
+
+            <Border Style="{StaticResource Card}">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="Quartier / Emplacement" Style="{StaticResource Muted}" />
+                    <Label Text="{Binding Bin.Name}" FontAttributes="Bold" />
+                    <Label Text="{Binding Bin.Location}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Style="{StaticResource Card}">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Statut actuel" Style="{StaticResource Muted}" />
+                    <Label Text="{Binding Bin.StatusText}" FontAttributes="Bold" FontSize="18" />
+                    <ProgressBar Progress="{Binding Bin.FillRatio}" ProgressColor="{StaticResource Success}">
+                        <ProgressBar.Triggers>
+                            <DataTrigger TargetType="ProgressBar" Binding="{Binding Bin.IsAlert}" Value="True">
+                                <Setter Property="ProgressColor" Value="{StaticResource Danger}" />
+                            </DataTrigger>
+                        </ProgressBar.Triggers>
+                    </ProgressBar>
+                    <Label Text="Alerte : ce bac approche de sa capacité maximale." IsVisible="{Binding Bin.IsAlert}"
+                           TextColor="{StaticResource Danger}" FontSize="14" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Style="{StaticResource Card}">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Informations pratiques" FontAttributes="Bold" />
+                    <Label Text="{Binding Bin.WasteType, StringFormat='• Type de déchets acceptés : {0}'}" />
+                    <Label Text="{Binding Bin.NextCollection, StringFormat='• Prochaine collecte prévue : {0}'}" />
+                    <Label Text="{Binding Bin.Responsible, StringFormat='• Responsable du secteur : {0}'}" />
+                </VerticalStackLayout>
+            </Border>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

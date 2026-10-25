@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:DoualaClean.ViewModels"
+             xmlns:m="clr-namespace:DoualaClean.Models"
+             xmlns:c="clr-namespace:DoualaClean.Controls"
+             x:Class="DoualaClean.Views.BinsPage"
+             x:DataType="vm:BinsViewModel" Title="Carte des bacs">
+    <ScrollView>
+        <VerticalStackLayout Padding="24,30,24,32" Spacing="16">
+            <c:BackButton />
+            <Label Text="Carte des bacs" Style="{StaticResource Title}" Margin="0,8,0,8" />
+
+            <VerticalStackLayout Spacing="16" BindableLayout.ItemsSource="{Binding Bins}">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate x:DataType="m:CollectionBin">
+                        <Border Style="{StaticResource Card}" Padding="0">
+                            <VerticalStackLayout>
+                                <Image Source="{Binding Image}" HeightRequest="150" Aspect="AspectFill" />
+                                <VerticalStackLayout Padding="14" Spacing="6">
+                                    <Label Text="{Binding Name}" FontAttributes="Bold" />
+                                    <Label Text="{Binding WasteType}" Style="{StaticResource Muted}" />
+                                    <ProgressBar Progress="{Binding FillRatio}" ProgressColor="{StaticResource Success}">
+                                        <ProgressBar.Triggers>
+                                            <DataTrigger TargetType="ProgressBar" Binding="{Binding IsAlert}" Value="True">
+                                                <Setter Property="ProgressColor" Value="{StaticResource Danger}" />
+                                            </DataTrigger>
+                                        </ProgressBar.Triggers>
+                                    </ProgressBar>
+                                    <Label Text="{Binding StatusText}" FontSize="14" />
+                                </VerticalStackLayout>
+                            </VerticalStackLayout>
+                            <Border.GestureRecognizers><TapGestureRecognizer Tapped="OnBinTapped" /></Border.GestureRecognizers>
+                        </Border>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </VerticalStackLayout>
+
+            <Button Text="Centrer sur ma position" Command="{Binding CenterOnMeCommand}" Margin="0,8,0,0" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

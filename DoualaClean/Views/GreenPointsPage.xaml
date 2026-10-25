@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:DoualaClean.ViewModels"
+             xmlns:m="clr-namespace:DoualaClean.Models"
+             xmlns:c="clr-namespace:DoualaClean.Controls"
+             x:Class="DoualaClean.Views.GreenPointsPage"
+             x:DataType="vm:GreenPointsViewModel" Title="Mes Green Points">
+    <ScrollView>
+        <VerticalStackLayout Padding="24,30,24,32" Spacing="14">
+            <c:BackButton />
+            <Label Text="Mes Green Points" Style="{StaticResource Title}" Margin="0,8,0,8" />
+            <Label Text="{Binding Points, StringFormat='{0} pts'}" FontSize="52" FontAttributes="Bold"
+                   TextColor="{StaticResource Success}" HorizontalOptions="Center" />
+            <Label Text="{Binding Level, StringFormat='Niveau : {0}'}" FontSize="18" HorizontalOptions="Center" Margin="0,0,0,12" />
+
+            <VerticalStackLayout Spacing="10" BindableLayout.ItemsSource="{Binding History}">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate x:DataType="m:PointsEntry">
+                        <Border Style="{StaticResource Card}" Padding="14">
+                            <Label Text="{Binding Display}" />
+                        </Border>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

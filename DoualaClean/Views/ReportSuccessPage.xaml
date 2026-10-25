@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:DoualaClean.ViewModels"
+             xmlns:m="clr-namespace:DoualaClean.Models"
+             xmlns:c="clr-namespace:DoualaClean.Controls"
+             x:Class="DoualaClean.Views.ReportSuccessPage"
+             x:DataType="vm:ReportSuccessViewModel" Title="Signalement envoyé">
+    <VerticalStackLayout Padding="32" Spacing="20" VerticalOptions="Center">
+        <Label Text="✅" FontSize="72" HorizontalOptions="Center" />
+        <Label Text="Signalement envoyé avec succès !" Style="{StaticResource Title}" FontSize="24" />
+        <Label Text="{Binding Message}" HorizontalTextAlignment="Center" />
+        <Label Text="{Binding PointsText}" FontSize="22" FontAttributes="Bold" HorizontalOptions="Center"
+               TextColor="{StaticResource Success}" />
+        <Button Text="Retour à l'accueil" Command="{Binding GoHomeCommand}" Margin="0,24,0,0" />
+        <Button Text="Voir mes signalements" Command="{Binding GoTrackingCommand}" Style="{StaticResource SecondaryButton}" />
+    </VerticalStackLayout>
+</ContentPage>

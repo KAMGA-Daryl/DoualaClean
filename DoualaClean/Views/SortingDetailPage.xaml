@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:DoualaClean.ViewModels"
+             xmlns:m="clr-namespace:DoualaClean.Models"
+             xmlns:c="clr-namespace:DoualaClean.Controls"
+             x:Class="DoualaClean.Views.SortingDetailPage"
+             x:DataType="vm:SortingDetailViewModel" Title="Détail du tri">
+    <ScrollView>
+        <VerticalStackLayout Padding="24,30,24,32" Spacing="16">
+            <c:BackButton />
+            <Label Text="{Binding Category.Icon}" FontSize="56" HorizontalOptions="Center" />
+            <Label Text="{Binding Category.Title}" Style="{StaticResource Title}" Margin="0,0,0,8" />
+
+            <Border Style="{StaticResource Card}">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Ce qu'on y jette :" FontAttributes="Bold" />
+                    <VerticalStackLayout Spacing="6" BindableLayout.ItemsSource="{Binding Category.WhatToThrow}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="x:String">
+                                <Label Text="{Binding ., StringFormat='• {0}'}" />
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Style="{StaticResource Card}">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Consignes de tri :" FontAttributes="Bold" />
+                    <VerticalStackLayout Spacing="6" BindableLayout.ItemsSource="{Binding Category.Rules}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="x:String">
+                                <Label Text="{Binding ., StringFormat='• {0}'}" />
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

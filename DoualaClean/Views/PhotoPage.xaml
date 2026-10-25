@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:DoualaClean.ViewModels"
+             xmlns:m="clr-namespace:DoualaClean.Models"
+             xmlns:c="clr-namespace:DoualaClean.Controls"
+             x:Class="DoualaClean.Views.PhotoPage"
+             x:DataType="vm:ReportViewModel" Title="Ajouter une photo">
+    <ScrollView>
+        <VerticalStackLayout Padding="24,30,24,32" Spacing="16">
+            <c:BackButton />
+            <Label Text="Ajouter une photo" Style="{StaticResource Title}" FontSize="24" Margin="0,8,0,8" />
+
+            <Border Style="{StaticResource Card}" HeightRequest="260" Padding="0" IsVisible="{Binding HasNoPhoto}">
+                <Label Text="Aucune photo pour le moment" Style="{StaticResource Muted}" HorizontalOptions="Center" VerticalOptions="Center" />
+            </Border>
+            <Border StrokeThickness="0" StrokeShape="RoundRectangle 16" HeightRequest="260" IsVisible="{Binding HasPhoto}">
+                <Image Source="{Binding PhotoSource}" Aspect="AspectFill" />
+            </Border>
+            <Label Text="{Binding PhotoInfo}" IsVisible="{Binding HasPhoto}" HorizontalTextAlignment="Center" />
+
+            <Button Text="📷  Prendre une photo" Command="{Binding TakePhotoCommand}" FontSize="17" />
+            <Button Text="🖼️  Choisir dans la galerie" Command="{Binding PickPhotoCommand}" Style="{StaticResource SecondaryButton}" />
+            <Button Text="Supprimer la photo" Command="{Binding RemovePhotoCommand}" IsVisible="{Binding HasPhoto}"
+                    BackgroundColor="Transparent" TextColor="{StaticResource Danger}" FontSize="15" />
+            <Button Text="Valider" Command="{Binding ConfirmCommand}" Margin="0,8,0,0" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

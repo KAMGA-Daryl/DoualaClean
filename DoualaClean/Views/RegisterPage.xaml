@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:DoualaClean.ViewModels"
+             xmlns:m="clr-namespace:DoualaClean.Models"
+             xmlns:c="clr-namespace:DoualaClean.Controls"
+             x:Class="DoualaClean.Views.RegisterPage"
+             x:DataType="vm:RegisterViewModel" Title="Inscription">
+    <ScrollView>
+        <VerticalStackLayout Padding="32,60,32,32" Spacing="16">
+            <Border BackgroundColor="White" StrokeThickness="0" StrokeShape="RoundRectangle 16" Padding="12">
+                <Image Source="logo.png" HeightRequest="80" Aspect="AspectFit" />
+            </Border>
+            <Label Text="Inscription" Style="{StaticResource Title}" Margin="0,28,0,8" />
+
+            <Entry Placeholder="Email" Keyboard="Email" Text="{Binding Email}" ReturnType="Next" />
+            <Entry Placeholder="Nom complet" Keyboard="Text" Text="{Binding FullName}" ReturnType="Next" />
+            <Entry Placeholder="Mot de passe (6 caractères min.)" IsPassword="True" Text="{Binding Password}"
+                   ReturnType="Go" ReturnCommand="{Binding RegisterCommand}" />
+
+            <Label Text="{Binding ErrorMessage}" IsVisible="{Binding HasError}" Style="{StaticResource Error}" />
+
+            <Button Text="S'inscrire" Command="{Binding RegisterCommand}" IsEnabled="{Binding IsNotBusy}" Margin="0,16,0,0" />
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+
+            <Label Text="Déjà un compte ? Se connecter" Style="{StaticResource Link}" Margin="0,24,0,0">
+                <Label.GestureRecognizers><TapGestureRecognizer Command="{Binding GoLoginCommand}" /></Label.GestureRecognizers>
+            </Label>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

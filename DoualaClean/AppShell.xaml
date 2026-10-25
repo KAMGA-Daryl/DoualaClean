@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:views="clr-namespace:DoualaClean.Views"
+       x:Class="DoualaClean.AppShell"
+       Shell.FlyoutBehavior="Disabled"
+       Shell.NavBarIsVisible="False"
+       Shell.TabBarIsVisible="False">
+
+    <ShellContent x:Name="LoginItem" Route="LoginPage" ContentTemplate="{DataTemplate views:LoginPage}" />
+    <ShellContent x:Name="HomeItem" Route="HomePage" ContentTemplate="{DataTemplate views:HomePage}" />
+
+</Shell>

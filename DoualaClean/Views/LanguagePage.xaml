@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:DoualaClean.ViewModels"
+             xmlns:m="clr-namespace:DoualaClean.Models"
+             xmlns:c="clr-namespace:DoualaClean.Controls"
+             x:Class="DoualaClean.Views.LanguagePage"
+             x:DataType="vm:SettingsViewModel" Title="Choix de langue">
+    <VerticalStackLayout Padding="24,30,24,32" Spacing="16">
+        <c:BackButton />
+        <Label Text="Choix de langue" Style="{StaticResource Title}" Margin="0,8,0,16" />
+        <Button Text="{Binding FrenchText}" Command="{Binding SetLanguageCommand}" CommandParameter="fr" Style="{StaticResource SecondaryButton}" HeightRequest="60" />
+        <Button Text="{Binding EnglishText}" Command="{Binding SetLanguageCommand}" CommandParameter="en" Style="{StaticResource SecondaryButton}" HeightRequest="60" />
+    </VerticalStackLayout>
+</ContentPage>

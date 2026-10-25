@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:DoualaClean.ViewModels"
+             xmlns:m="clr-namespace:DoualaClean.Models"
+             xmlns:c="clr-namespace:DoualaClean.Controls"
+             x:Class="DoualaClean.Views.ReportPage"
+             x:DataType="vm:ReportViewModel" Title="Signaler un dépôt">
+    <ScrollView>
+        <VerticalStackLayout Padding="24,30,24,32" Spacing="16">
+            <c:BackButton />
+            <Label Text="Signaler un dépôt" Style="{StaticResource Title}" Margin="0,8,0,16" />
+
+            <Border Style="{StaticResource Card}">
+                <Grid ColumnDefinitions="*,Auto">
+                    <Label Text="{Binding DescriptionSummary}" VerticalOptions="Center" />
+                    <Label Grid.Column="1" Text="›" FontSize="26" />
+                </Grid>
+                <Border.GestureRecognizers><TapGestureRecognizer Command="{Binding OpenDescriptionCommand}" /></Border.GestureRecognizers>
+            </Border>
+
+            <Border Style="{StaticResource Card}">
+                <Grid ColumnDefinitions="*,Auto">
+                    <Label Text="{Binding PhotoSummary}" VerticalOptions="Center" />
+                    <Label Grid.Column="1" Text="›" FontSize="26" />
+                </Grid>
+                <Border.GestureRecognizers><TapGestureRecognizer Command="{Binding OpenPhotoCommand}" /></Border.GestureRecognizers>
+            </Border>
+
+            <Border Style="{StaticResource Card}">
+                <Grid ColumnDefinitions="*,Auto">
+                    <Label Text="{Binding LocationSummary}" VerticalOptions="Center" />
+                    <Label Grid.Column="1" Text="›" FontSize="26" />
+                </Grid>
+                <Border.GestureRecognizers><TapGestureRecognizer Command="{Binding OpenLocationCommand}" /></Border.GestureRecognizers>
+            </Border>
+
+            <Button Text="Envoyer le signalement" Command="{Binding SubmitCommand}" IsEnabled="{Binding IsNotBusy}" Margin="0,24,0,0" />
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+            <Label Text="Une description et votre position GPS sont nécessaires. La photo est recommandée."
+                   Style="{StaticResource Muted}" HorizontalTextAlignment="Center" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

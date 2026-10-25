@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:DoualaClean.ViewModels"
+             xmlns:m="clr-namespace:DoualaClean.Models"
+             xmlns:c="clr-namespace:DoualaClean.Controls"
+             x:Class="DoualaClean.Views.TrackingPage"
+             x:DataType="vm:TrackingViewModel" Title="Suivi des signalements">
+    <ContentPage.Resources>
+        <DataTemplate x:Key="ReportTemplate" x:DataType="m:WasteReport">
+            <Border Style="{StaticResource Card}" Margin="0,0,0,12">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="{Binding Title}" FontAttributes="Bold" />
+                    <Label Text="{Binding Quartier, StringFormat='Lieu : {0}'}" />
+                    <Label Text="{Binding WasteType, StringFormat='Type : {0}'}" />
+                    <Label Text="{Binding RelativeDate}" Style="{StaticResource Muted}" />
+                    <Label FontAttributes="Bold">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Statut : " />
+                                <Span Text="{Binding StatusIcon}" />
+                                <Span Text=" " />
+                                <Span Text="{Binding StatusLabel}" />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                </VerticalStackLayout>
+                <Border.GestureRecognizers><TapGestureRecognizer Tapped="OnReportTapped" /></Border.GestureRecognizers>
+            </Border>
+        </DataTemplate>
+    </ContentPage.Resources>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="24,30,24,32" Spacing="12">
+            <c:BackButton />
+            <Label Text="Historique de mes signalements" Style="{StaticResource Title}" FontSize="24" Margin="0,8,0,12" />
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+            <Label Text="{Binding ErrorMessage}" IsVisible="{Binding HasError}" Style="{StaticResource Error}" />
+            <Label Text="Aucun signalement pour le moment. Signalez votre premier dépôt !" IsVisible="{Binding IsEmpty}"
+                   Style="{StaticResource Muted}" HorizontalTextAlignment="Center" />
+
+            <Label Text="Signalements en cours / pris en charge" FontAttributes="Bold" Margin="0,8,0,0" />
+            <VerticalStackLayout BindableLayout.ItemsSource="{Binding InProgress}"
+                                 BindableLayout.ItemTemplate="{StaticResource ReportTemplate}" />
+
+            <Label Text="Signalements résolus" FontAttributes="Bold" Margin="0,16,0,0" />
+            <VerticalStackLayout BindableLayout.ItemsSource="{Binding Resolved}"
+                                 BindableLayout.ItemTemplate="{StaticResource ReportTemplate}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

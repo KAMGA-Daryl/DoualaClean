@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:DoualaClean.ViewModels"
+             xmlns:m="clr-namespace:DoualaClean.Models"
+             xmlns:c="clr-namespace:DoualaClean.Controls"
+             xmlns:maps="http://schemas.microsoft.com/dotnet/2021/maui/maps"
+             x:Class="DoualaClean.Views.LocationPage"
+             x:DataType="vm:ReportViewModel" Title="Localisation (GPS)">
+    <ScrollView>
+        <VerticalStackLayout Padding="24,30,24,32" Spacing="16">
+            <c:BackButton />
+            <Label Text="Localisation (GPS)" Style="{StaticResource Title}" FontSize="24" Margin="0,8,0,8" />
+
+            <Border StrokeThickness="0" StrokeShape="RoundRectangle 16" HeightRequest="320">
+                <maps:Map x:Name="LocationMap" IsShowingUser="True" />
+            </Border>
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+            <Label Text="{Binding ErrorMessage}" IsVisible="{Binding HasError}" Style="{StaticResource Error}" />
+            <Border Style="{StaticResource Card}">
+                <Label Text="{Binding GpsText}" HorizontalTextAlignment="Center" />
+            </Border>
+
+            <Button Text="📍  Actualiser ma position" Command="{Binding RefreshLocationCommand}" Style="{StaticResource SecondaryButton}" />
+            <Button Text="Valider" Command="{Binding ConfirmCommand}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

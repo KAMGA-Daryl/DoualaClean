@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:DoualaClean.ViewModels"
+             xmlns:m="clr-namespace:DoualaClean.Models"
+             xmlns:c="clr-namespace:DoualaClean.Controls"
+             x:Class="DoualaClean.Views.ProfilePage"
+             x:DataType="vm:ProfileViewModel" Title="Mon Profil">
+    <ScrollView>
+        <VerticalStackLayout Padding="24,30,24,32" Spacing="14">
+            <c:BackButton />
+            <Label Text="Mon Profil" Style="{StaticResource Title}" Margin="0,8,0,8" />
+
+            <Border WidthRequest="120" HeightRequest="120" StrokeShape="Ellipse" StrokeThickness="0"
+                    BackgroundColor="{StaticResource Brand}" HorizontalOptions="Center">
+                <Label Text="{Binding Initials}" TextColor="White" FontSize="42" FontAttributes="Bold"
+                       HorizontalOptions="Center" VerticalOptions="Center" />
+            </Border>
+            <Label Text="{Binding FullName}" FontSize="22" FontAttributes="Bold" HorizontalOptions="Center" Margin="0,0,0,12" />
+
+            <Border Style="{StaticResource Card}">
+                <Grid ColumnDefinitions="*,Auto">
+                    <Label Text="{Binding GreenPoints, StringFormat='🌿 Mes Green Points : {0} pts'}" VerticalOptions="Center" FontAttributes="Bold" />
+                    <Label Grid.Column="1" Text="›" FontSize="26" />
+                </Grid>
+                <Border.GestureRecognizers><TapGestureRecognizer Command="{Binding GoPointsCommand}" /></Border.GestureRecognizers>
+            </Border>
+            <Border Style="{StaticResource Card}">
+                <Grid ColumnDefinitions="*,Auto">
+                    <Label Text="📋 Mes signalements" VerticalOptions="Center" />
+                    <Label Grid.Column="1" Text="›" FontSize="26" />
+                </Grid>
+                <Border.GestureRecognizers><TapGestureRecognizer Command="{Binding GoReportsCommand}" /></Border.GestureRecognizers>
+            </Border>
+            <Border Style="{StaticResource Card}">
+                <Grid ColumnDefinitions="*,Auto">
+                    <Label Text="🔔 Paramètres de notifications" VerticalOptions="Center" />
+                    <Label Grid.Column="1" Text="›" FontSize="26" />
+                </Grid>
+                <Border.GestureRecognizers><TapGestureRecognizer Command="{Binding GoNotificationsCommand}" /></Border.GestureRecognizers>
+            </Border>
+            <Border Style="{StaticResource Card}">
+                <Grid ColumnDefinitions="*,Auto">
+                    <Label Text="⚙️ Paramètres &amp; options" VerticalOptions="Center" />
+                    <Label Grid.Column="1" Text="›" FontSize="26" />
+                </Grid>
+                <Border.GestureRecognizers><TapGestureRecognizer Command="{Binding GoSettingsCommand}" /></Border.GestureRecognizers>
+            </Border>
+
+            <Button Text="Se déconnecter" Command="{Binding LogoutCommand}" BackgroundColor="{StaticResource Danger}" Margin="0,16,0,0" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:DoualaClean.ViewModels"
+             xmlns:m="clr-namespace:DoualaClean.Models"
+             xmlns:c="clr-namespace:DoualaClean.Controls"
+             x:Class="DoualaClean.Views.DescriptionPage"
+             x:DataType="vm:ReportViewModel" Title="Description du problème">
+    <ScrollView>
+        <VerticalStackLayout Padding="24,30,24,32" Spacing="16">
+            <c:BackButton />
+            <Label Text="Description du problème" Style="{StaticResource Title}" FontSize="24" Margin="0,8,0,8" />
+            <Picker Title="Type de déchets" ItemsSource="{Binding WasteTypes}" SelectedItem="{Binding SelectedWasteType}" />
+            <Editor Placeholder="Ex : Dépôt sauvage de déchets plastiques et ordures ménagères bloquant le passage. Lieu : Akwa, près du carrefour principal."
+                    Text="{Binding Description}" HeightRequest="200" MaxLength="500" AutoSize="Disabled" />
+            <Button Text="Valider" Command="{Binding ConfirmCommand}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

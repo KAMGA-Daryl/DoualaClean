@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:DoualaClean.ViewModels"
+             xmlns:m="clr-namespace:DoualaClean.Models"
+             xmlns:c="clr-namespace:DoualaClean.Controls"
+             x:Class="DoualaClean.Views.ReportDetailPage"
+             x:DataType="vm:ReportDetailViewModel" Title="Détail du signalement">
+    <ScrollView>
+        <VerticalStackLayout Padding="24,30,24,32" Spacing="14">
+            <c:BackButton />
+            <Label Text="{Binding Report.Id, StringFormat='Détail du signalement #{0:00}'}" Style="{StaticResource Title}" FontSize="24" Margin="0,8,0,8" />
+
+            <Border StrokeThickness="0" StrokeShape="RoundRectangle 16" HeightRequest="220" IsVisible="{Binding Report.HasPhoto}">
+                <Image Source="{Binding Report.PhotoUrl}" Aspect="AspectFill" />
+            </Border>
+
+            <Border Style="{StaticResource Card}">
+                <VerticalStackLayout Spacing="2">
+                    <Label Text="Quartier :" Style="{StaticResource Muted}" />
+                    <Label Text="{Binding Report.Address}" FontAttributes="Bold" />
+                </VerticalStackLayout>
+            </Border>
+            <Border Style="{StaticResource Card}">
+                <VerticalStackLayout Spacing="2">
+                    <Label Text="Type de déchets :" Style="{StaticResource Muted}" />
+                    <Label Text="{Binding Report.WasteType}" FontAttributes="Bold" />
+                </VerticalStackLayout>
+            </Border>
+            <Border Style="{StaticResource Card}">
+                <VerticalStackLayout Spacing="2">
+                    <Label Text="Statut actuel :" Style="{StaticResource Muted}" />
+                    <Label Text="{Binding Report.StatusLabel}" FontAttributes="Bold" />
+                </VerticalStackLayout>
+            </Border>
+            <Border Style="{StaticResource Card}">
+                <VerticalStackLayout Spacing="2">
+                    <Label Text="Date :" Style="{StaticResource Muted}" />
+                    <Label Text="{Binding Report.RelativeDate}" FontAttributes="Bold" />
+                </VerticalStackLayout>
+            </Border>
+            <Border Style="{StaticResource Card}" IsVisible="{Binding Report.IsResolved}">
+                <VerticalStackLayout Spacing="2">
+                    <Label Text="Récompense :" Style="{StaticResource Muted}" />
+                    <Label Text="{Binding Report.PointsEarned, StringFormat='+{0} Green Points ajoutés à votre profil'}" FontAttributes="Bold" />
+                </VerticalStackLayout>
+            </Border>
+            <Border Style="{StaticResource Card}">
+                <VerticalStackLayout Spacing="2">
+                    <Label Text="Description :" Style="{StaticResource Muted}" />
+                    <Label Text="{Binding Report.Description}" />
+                </VerticalStackLayout>
+            </Border>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
