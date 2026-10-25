@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DoualaClean – Administration</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<style>
+  :root { --brand:#0B5A6B; --brand2:#12A58B; --ok:#14AE5C; --warn:#F5A623; --bg:#f3f6f7; --card:#fff; --txt:#16232a; --mut:#66767d; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:Segoe UI,Roboto,Arial,sans-serif; background:var(--bg); color:var(--txt); }
+  header { background:var(--brand); color:#fff; padding:14px 24px; display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+  header h1 { font-size:20px; margin:0; flex:1; }
+  .chip { background:rgba(255,255,255,.15); padding:6px 12px; border-radius:20px; font-size:14px; }
+  button { cursor:pointer; border:0; border-radius:8px; padding:9px 14px; font-size:14px; background:var(--brand2); color:#fff; }
+  button.ghost { background:transparent; border:1px solid rgba(255,255,255,.5); }
+  button.ok { background:var(--ok); } button.warn { background:var(--warn); }
+  nav { display:flex; gap:8px; padding:14px 24px 0; }
+  nav button { background:#dfe7ea; color:var(--txt); } nav button.active { background:var(--brand); color:#fff; }
+  main { padding:16px 24px 40px; }
+  .toolbar { display:flex; gap:10px; align-items:center; margin-bottom:14px; }
+  select { padding:8px; border-radius:8px; border:1px solid #c6d1d5; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(310px,1fr)); gap:16px; }
+  .card { background:var(--card); border-radius:14px; overflow:hidden; box-shadow:0 1px 4px rgba(0,0,0,.08); display:flex; flex-direction:column; }
+  .card img { width:100%; height:190px; object-fit:cover; cursor:zoom-in; background:#dfe7ea; }
+  .noimg { height:190px; display:flex; align-items:center; justify-content:center; background:#e8eef0; color:var(--mut); }
+  .body { padding:14px; display:flex; flex-direction:column; gap:6px; flex:1; }
+  .meta { color:var(--mut); font-size:13px; }
+  .badge { display:inline-block; padding:3px 10px; border-radius:12px; font-size:12px; color:#fff; }
+  .b-EnCours { background:var(--warn); } .b-Resolu { background:var(--ok); }
+  a { color:var(--brand2); }
+  table { width:100%; border-collapse:collapse; background:#fff; border-radius:12px; overflow:hidden; }
+  th,td { text-align:left; padding:10px 12px; border-bottom:1px solid #e5ecee; font-size:14px; }
+  th { background:#e8eef0; }
+  #map { height:70vh; border-radius:14px; }
+  #login { max-width:360px; margin:12vh auto; background:#fff; padding:28px; border-radius:16px; box-shadow:0 2px 12px rgba(0,0,0,.1); display:flex; flex-direction:column; gap:12px; }
+  #login h2 { margin:0 0 4px; color:var(--brand); }
+  input { padding:11px; border-radius:8px; border:1px solid #c6d1d5; font-size:15px; }
+  .err { color:#c0392b; font-size:14px; min-height:18px; }
+  .b-new { background:#d64545; margin-left:6px; }
+  .info { background:#e8f3f1; border-bottom:1px solid #c9dfda; padding:8px 24px; font-size:13px; color:#0b4a57; }
+  .info code { background:#fff; padding:1px 6px; border-radius:4px; }
+  .hidden { display:none !important; }
+</style>
+</head>
+<body>
+
+<section id="login">
+  <h2>DoualaClean – Admin</h2>
+  <input id="email" type="email" placeholder="Email administrateur" autocomplete="username">
+  <input id="password" type="password" placeholder="Mot de passe" autocomplete="current-password">
+  <div class="err" id="loginErr"></div>
+  <button id="loginBtn">Se connecter</button>
+</section>
+
+<div id="app" class="hidden">
+  <header>
+    <h1>🌿 DoualaClean – Tableau de bord</h1>
+    <span class="chip" id="sUsers"></span><span class="chip" id="sReports"></span>
+    <span class="chip" id="sOpen"></span><span class="chip" id="sDone"></span>
+    <label class="chip"><input type="checkbox" id="auto" checked> Actualisation auto (10 s)</label>
+    <span class="chip" id="stamp"></span>
+    <button class="ghost" id="logout">Déconnexion</button>
+  </header>
+  <div class="info" id="serverInfo"></div>
+  <nav>
+    <button data-tab="reports" class="active">Signalements</button>
+    <button data-tab="map">Carte</button>
+    <button data-tab="users">Utilisateurs</button>
+  </nav>
+  <main>
+    <section id="tab-reports">
+      <div class="toolbar">
+        <select id="filter">
+          <option value="">Tous les statuts</option>
+          <option value="EnCours">En cours</option>
+          <option value="Resolu">Résolus</option>
+        </select>
+        <button id="refresh">↻ Actualiser</button>
+      </div>
+      <div class="grid" id="reports"></div>
+    </section>
+    <section id="tab-map" class="hidden"><div id="map"></div></section>
+    <section id="tab-users" class="hidden"><div style="overflow-x:auto"><table id="users"></table></div></section>
+  </main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const label = s => s === 'Resolu' ? 'Résolu' : 'En cours';
+const fmt = d => new Date(d).toLocaleString('fr-FR', { dateStyle:'medium', timeStyle:'short' });
+let token = sessionStorage.getItem('admin_token');
+let map, layer, reports = [], lastCount = -1;
+const isNew = d => (Date.now() - new Date(d).getTime()) < 120000;
+const newBadge = d => isNew(d) ? '<span class="badge b-new">Nouveau</span>' : '';
+
+async function api(path, opts = {}) {
+  const res = await fetch('/api' + path, { ...opts, headers: { 'Content-Type':'application/json', 'Authorization':'Bearer ' + token, ...(opts.headers||{}) } });
+  if (res.status === 401 || res.status === 403) {
+    const m = 'Accès refusé (HTTP ' + res.status + ') sur ' + path + '. Voir la fenêtre du serveur (lignes [JWT]).';
+    logout(m); throw new Error(m);
+  }
+  if (!res.ok) throw new Error((await res.json().catch(()=>({}))).error || 'Erreur ' + res.status);
+  return res.json();
+}
+
+function show(loggedIn) {
+  $('#login').classList.toggle('hidden', loggedIn);
+  $('#app').classList.toggle('hidden', !loggedIn);
+}
+function logout(msg) { token = null; sessionStorage.removeItem('admin_token'); show(false); $('#loginErr').textContent = msg || ''; }
+
+$('#loginBtn').onclick = login;
+$('#password').onkeydown = e => { if (e.key === 'Enter') login(); };
+async function login() {
+  $('#loginErr').textContent = '';
+  try {
+    const res = await fetch('/api/auth/login', { method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ email: $('#email').value, password: $('#password').value }) });
+    let data = {};
+    try { data = await res.json(); } catch (_) {}
+    if (!res.ok) throw new Error(data.error || 'Connexion impossible (HTTP ' + res.status + ')');
+    if (!data.user || data.user.role !== 'Admin') throw new Error('Ce compte n\'est pas administrateur.');
+    token = data.token; sessionStorage.setItem('admin_token', token);
+    show(true);
+    await loadAll();            // si l'accès est refusé, la raison s'affiche sur l'écran de connexion
+    loadServerInfo();
+    $('#password').value = '';
+  } catch (e) { $('#loginErr').textContent = e.message; }
+}
+$('#logout').onclick = logout;
+
+document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
+  document.querySelectorAll('nav button').forEach(x => x.classList.toggle('active', x === b));
+  ['reports','map','users'].forEach(t => $('#tab-' + t).classList.toggle('hidden', t !== b.dataset.tab));
+  if (b.dataset.tab === 'map') { lastCount = -1; drawMap(); }
+});
+$('#refresh').onclick = loadAll;
+$('#filter').onchange = loadReports;
+
+async function loadAll() {
+  await Promise.all([loadStats(), loadReports(), loadUsers()]);
+  $('#stamp').textContent = 'Mis à jour à ' + new Date().toLocaleTimeString('fr-FR');
+}
+
+async function loadServerInfo() {
+  try {
+    const i = await api('/admin/server-info');
+    $('#serverInfo').innerHTML = 'Adresse à saisir dans l\'application : émulateur Android <code>' + esc(i.emulatorUrl) + '</code>' +
+      (i.phoneUrls.length ? ' · téléphone (même Wi-Fi) ' + i.phoneUrls.map(u => '<code>' + esc(u) + '</code>').join(' ou ') : '');
+  } catch (e) { $('#serverInfo').textContent = ''; }
+}
+setInterval(() => { if (token && $('#auto').checked) loadAll().catch(() => {}); }, 10000);
+
+async function loadStats() {
+  const s = await api('/admin/stats');
+  $('#sUsers').textContent = '👥 ' + s.users + ' utilisateurs';
+  $('#sReports').textContent = '📋 ' + s.reports + ' signalements';
+  $('#sOpen').textContent = '🟡 ' + s.enCours + ' en cours';
+  $('#sDone').textContent = '🟢 ' + s.resolus + ' résolus';
+}
+
+async function loadReports() {
+  const f = $('#filter').value;
+  reports = await api('/admin/reports' + (f ? '?status=' + f : ''));
+  $('#reports').innerHTML = reports.map(r => `
+    <article class="card">
+      ${r.photoUrl ? `<img src="${esc(r.photoUrl)}" alt="Photo du dépôt" onclick="window.open('${esc(r.photoUrl)}','_blank')">` : '<div class="noimg">Pas de photo</div>'}
+      <div class="body">
+        <div><span class="badge b-${esc(r.status)}">${label(r.status)}</span>${newBadge(r.createdAt)}</div>
+        <strong>#${r.id} – ${esc(r.quartier)}</strong>
+        <div class="meta">${esc(r.wasteType || 'Type non précisé')}</div>
+        <div>${esc(r.description)}</div>
+        <div class="meta">📍 ${esc(r.address)}<br>
+          <a target="_blank" rel="noopener" href="https://www.google.com/maps?q=${r.latitude},${r.longitude}">${r.latitude.toFixed(5)}, ${r.longitude.toFixed(5)} (ouvrir la carte)</a></div>
+        <div class="meta">👤 ${esc(r.userName)} (${esc(r.userEmail)})<br>🕒 ${fmt(r.createdAt)}</div>
+        <div style="margin-top:auto;padding-top:8px">
+          ${r.status === 'Resolu'
+            ? `<button class="warn" onclick="setStatus(${r.id},'EnCours')">Remettre en cours</button>`
+            : `<button class="ok" onclick="setStatus(${r.id},'Resolu')">✔ Marquer comme résolu</button>`}
+        </div>
+      </div>
+    </article>`).join('') || '<p>Aucun signalement.</p>';
+  if (!$('#tab-map').classList.contains('hidden')) drawMap();
+}
+
+async function setStatus(id, status) {
+  try { await api(`/admin/reports/${id}/status`, { method:'PATCH', body: JSON.stringify({ status }) }); await loadAll(); }
+  catch (e) { alert(e.message); }
+}
+
+async function loadUsers() {
+  const users = await api('/admin/users');
+  $('#users').innerHTML = '<tr><th>Nom</th><th>Email</th><th>Rôle</th><th>Green Points</th><th>Signalements</th><th>Inscrit le</th></tr>' +
+    users.map(u => `<tr><td>${esc(u.fullName)}${newBadge(u.createdAt)}</td><td>${esc(u.email)}</td><td>${esc(u.role)}</td><td>${u.greenPoints}</td><td>${u.reports}</td><td>${fmt(u.createdAt)}</td></tr>`).join('');
+}
+
+function drawMap() {
+  if (!map) { map = L.map('map').setView([4.0511, 9.7679], 12);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution:'© OpenStreetMap' }).addTo(map);
+    layer = L.layerGroup().addTo(map); }
+  setTimeout(() => map.invalidateSize(), 50);
+  layer.clearLayers();
+  const pts = [];
+  reports.forEach(r => {
+    const color = r.status === 'Resolu' ? '#14AE5C' : '#F5A623';
+    L.circleMarker([r.latitude, r.longitude], { radius:10, color:'#fff', weight:2, fillColor:color, fillOpacity:.95 })
+      .bindPopup(`<strong>#${r.id} – ${esc(r.quartier)}</strong><br>${label(r.status)}<br>${esc(r.description)}` +
+                 (r.photoUrl ? `<br><img src="${esc(r.photoUrl)}" style="width:200px;margin-top:6px;border-radius:6px">` : ''))
+      .addTo(layer);
+    pts.push([r.latitude, r.longitude]);
+  });
+  if (pts.length && pts.length !== lastCount) { map.fitBounds(pts, { padding:[40,40], maxZoom:16 }); lastCount = pts.length; }
+}
+
+if (token) { show(true); loadAll().catch(()=>{}); loadServerInfo(); } else show(false);
+</script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "DoualaClean.Api": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "http://localhost:5080/admin/",
+      "applicationUrl": "http://0.0.0.0:5080",
+      "environmentVariables": { "ASPNETCORE_ENVIRONMENT": "Development" }
+    }
+  }
+}
